@@ -8,7 +8,7 @@
   "devDependencies": {
     "vite": "^2.4.0"
   },
-  "name": "swa-fable-starter",
+  "name": "Conway Game of Life Static Web App",
   "version": "1.0.0",
   "dependencies": {
     "react": "^17.0.2",
