@@ -1,0 +1,16 @@
+{
+  "background_color": "#ffffff",
+  "description": "Implementation of Conway's Game of Life in F#, Fable, and Feliz, and hosted on Azure Static Web Apps",
+  "dir": "ltr",
+  "display": "minimal-ui",
+  "name": "conwaysgameoflife",
+  "orientation": "portrait",
+  "scope": "/",
+  "short_name": "conwaysgameoflife",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "categories": [],
+  "screenshots": [],
+  "icons": [],
+  "shortcuts": []
+}
