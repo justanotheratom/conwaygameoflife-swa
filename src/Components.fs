@@ -32,6 +32,10 @@ type Components () =
         let updateGameState updateFn =
             updateCount <- updateCount + 1
             setGameState updateFn
+        
+        let resetGameState () =
+            updateCount <- 0
+            setGameState (fun _ -> ConwayGameOfLife.initialState boardWidth boardHeight)
 
         let subscribeToTimer() =
             let subscriptionId =
@@ -85,7 +89,7 @@ type Components () =
                             prop.onClick (
                                 fun _ ->
                                     setGameStarted false
-                                    updateGameState (fun _ -> ConwayGameOfLife.initialState boardWidth boardHeight)
+                                    resetGameState
                             )
                         ]
                         Html.button [
@@ -93,7 +97,7 @@ type Components () =
                             prop.onClick (
                                 fun _ ->
                                     setGameStarted false
-                                    updateGameState (fun _ -> ConwayGameOfLife.initialState boardWidth boardHeight)
+                                    resetGameState
                                     setGameStarted true
                             )
                         ]
