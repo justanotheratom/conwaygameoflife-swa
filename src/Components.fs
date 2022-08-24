@@ -3,22 +3,40 @@ namespace App
 open Feliz
 open Fable.Core.JS
 
-type Components =
+type Components () =
+
+    [<Literal>]
+    static let boardWidth = 30
+    [<Literal>]
+    static let boardHeight = boardWidth
+
+    [<Literal>]
+    static let cellWidth = 10
+    [<Literal>]
+    static let cellHeight = cellWidth
+
+    [<Literal>]
+    static let updateIntervalMs = 500
+    [<Literal>]
+    static let msPerSecond = 1000
+
+    static let mutable updateCount : int = 0
 
     [<ReactComponent>]
     static member ConwayGameOfLife() =
 
-        let X = 30
-        let Y = X
-        let w = 10
-        let h = w
 
         let (gameStarted, setGameStarted) = React.useState(false)
-        let (gameState, setGameState) = React.useStateWithUpdater(ConwayGameOfLife.initialState X Y)
+        let (gameState, setGameState) = React.useStateWithUpdater(ConwayGameOfLife.initialState boardWidth boardHeight)
+
+        let updateGameState updateFn =
+            updateCount <- updateCount + 1
+            setGameState updateFn
 
         let subscribeToTimer() =
             let subscriptionId =
-                setInterval (fun _ -> setGameState (fun prevState -> ConwayGameOfLife.updateState prevState)) 500
+                setInterval (fun _ -> updateGameState (fun prevState -> ConwayGameOfLife.updateState prevState))
+                            updateIntervalMs
             React.createDisposable (fun _ -> clearTimeout subscriptionId)
 
         React.useEffect(subscribeToTimer, [| |])
@@ -36,19 +54,19 @@ type Components =
                     Html.div [
                         prop.style [
                             style.margin.auto
-                            style.marginBottom X
+                            style.marginBottom boardWidth
                             style.border(1, borderStyle.dotted, color.black)
-                            style.width (X * w)
+                            style.width (boardWidth * cellWidth)
                             style.display.flex
                         ]
                         prop.children [
-                            for y in 0..Y-1 do
+                            for y in 0..boardHeight-1 do
                                 Html.div [
-                                    for x in 0..X-1 do
+                                    for x in 0..boardWidth-1 do
                                         Html.div [
                                             prop.style [
-                                                style.width w
-                                                style.height h
+                                                style.width cellWidth
+                                                style.height cellHeight
                                                 if ConwayGameOfLife.isCellAlive x y gameState then
                                                     style.backgroundColor "black"
                                                 else
@@ -58,22 +76,27 @@ type Components =
                                 ]
                         ]
                     ]
-                    Html.button [
-                        prop.text "Abandon game"
-                        prop.onClick (
-                            fun _ ->
-                                setGameStarted false
-                                setGameState (fun _ -> ConwayGameOfLife.initialState X Y)
-                        )
+                    Html.p [
+                        Html.text (sprintf "Elapsed time: %u seconds" ((updateCount * updateIntervalMs) / msPerSecond))
                     ]
-                    Html.button [
-                        prop.text "Start a fresh game"
-                        prop.onClick (
-                            fun _ ->
-                                setGameStarted false
-                                setGameState (fun _ -> ConwayGameOfLife.initialState X Y)
-                                setGameStarted true
-                        )
+                    Html.div [
+                        Html.button [
+                            prop.text "Abandon game"
+                            prop.onClick (
+                                fun _ ->
+                                    setGameStarted false
+                                    updateGameState (fun _ -> ConwayGameOfLife.initialState boardWidth boardHeight)
+                            )
+                        ]
+                        Html.button [
+                            prop.text "Start a fresh game"
+                            prop.onClick (
+                                fun _ ->
+                                    setGameStarted false
+                                    updateGameState (fun _ -> ConwayGameOfLife.initialState boardWidth boardHeight)
+                                    setGameStarted true
+                            )
+                        ]
                     ]
             ]
         ]
