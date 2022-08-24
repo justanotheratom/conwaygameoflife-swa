@@ -6,7 +6,7 @@
       "version": "3.7.18",
       "commands": [
         "fable"
-     
+      ]
     },
     "paket": {
       "version": "5.258.1",
