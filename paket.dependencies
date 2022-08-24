@@ -1,5 +1,5 @@
 group Client
-    framework: netstandard2.0
+    framework: net6.0
     source https://api.nuget.org/v3/index.json
 
 nuget Feliz
