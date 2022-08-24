@@ -89,7 +89,7 @@ type Components () =
                             prop.onClick (
                                 fun _ ->
                                     setGameStarted false
-                                    resetGameState
+                                    resetGameState ()
                             )
                         ]
                         Html.button [
@@ -97,7 +97,7 @@ type Components () =
                             prop.onClick (
                                 fun _ ->
                                     setGameStarted false
-                                    resetGameState
+                                    resetGameState ()
                                     setGameStarted true
                             )
                         ]
